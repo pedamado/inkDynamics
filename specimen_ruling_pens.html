@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ruling Pen v3.8 Visual Specimen Calibration</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      background: #111216;
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    h1 {
+      margin: 0 0 6px 0;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    p {
+      margin: 0 0 16px 0;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+    canvas {
+      background: #ffffff;
+      border-radius: 6px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <h1>InkDynamics v3.8 — Calibrated Ruling Pen Physical Verification</h1>
+  <p>Verifying: 1. Pen-down angled pill ellipse · 2. Inverted friction skips · 3. Volcano burst catenary decay · 4. Provenance spit droplets</p>
+  <canvas id="specimen-canvas" width="1200" height="1280"></canvas>
+
+  <script type="module">
+    import { createInkDynamics } from './js/inkdynamics.js';
+
+    const canvas = document.getElementById('specimen-canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Create ONE instance for the canvas
+    const ink = createInkDynamics({
+      canvas,
+      tool: 'ruling_pen_curved',
+      preset: 'curved_ruling_medium',
+      color: '#191817',
+      thickness: 8.0,
+      autoStep: false
+    });
+
+    function drawSectionTitle(text, x, y) {
+      ctx.save();
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 15px -apple-system, BlinkMacSystemFont, sans-serif';
+      ctx.fillText(text, x, y);
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(x, y + 10);
+      ctx.lineTo(x + 1140, y + 10);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawLabel(text, x, y, bold = false) {
+      ctx.save();
+      ctx.fillStyle = bold ? '#1e293b' : '#64748b';
+      ctx.font = (bold ? 'bold 12px' : '12px') + ' -apple-system, BlinkMacSystemFont, sans-serif';
+      ctx.fillText(text, x, y);
+      ctx.restore();
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    // SECTION 1: PEN-DOWN ANGLED PILL ELLIPSE TOUCHDOWN
+    // ─────────────────────────────────────────────────────────────────
+    drawSectionTitle('1. Pen-Down Angled Pill-Like Ellipse Marks (Synchronized with bladeAngle)', 30, 40);
+
+    const penDownAngles = [0, 30, 45, 60, 90, 120];
+    penDownAngles.forEach((deg, idx) => {
+      const x = 80 + idx * 185;
+      const y = 85;
+      const rad = (deg * Math.PI) / 180;
+
+      // Curved ruling pen touchdown (Black)
+      ink.setTool('ruling_pen_curved', 'curved_ruling_broad');
+      ink.setColor('#191817');
+      ink.setThickness(10.0);
+      ink.setBladeAngle(rad);
+
+      ink.penDown(x, y, 0.6, 1000);
+      ink.penUp(x, y, 1050);
+
+      // Flat ruling pen touchdown (Red)
+      ink.setTool('ruling_pen_flat', 'flat_ruling_broad');
+      ink.setColor('#b8261a');
+      ink.setThickness(11.0);
+      ink.setBladeAngle(rad);
+
+      ink.penDown(x, y + 55, 0.6, 1100);
+      ink.penUp(x, y + 55, 1150);
+
+      drawLabel(`${deg}° Orientation`, x - 35, y + 100, true);
+    });
+
+    drawLabel('● Black: Curved Ruling Pen · ● Red: Flat Chisel Pen — Irregular narrow contact edge with 24-point paper tooth harmonic micro-jitter', 30, 215);
+
+    // ─────────────────────────────────────────────────────────────────
+    // SECTION 2: CURVED RULING PEN — FRICTION SKIPS (DENSE vs WIDE)
+    // ─────────────────────────────────────────────────────────────────
+    drawSectionTitle('2. Curved Blade Friction Skips Sensitivity Inversion (Dense Ladder 0.2x vs Wide Skips 2.5x)', 30, 260);
+
+    ink.setTool('ruling_pen_curved', 'curved_ruling_medium');
+    ink.setColor('#191817');
+    ink.setThickness(8.0);
+    ink.setBladeAngle(Math.PI / 4);
+    ink.setSnapIntensity(0.0);
+
+    // Dense Ladder (0.2x)
+    drawLabel('Dense Ladder (skipSensitivity = 0.2x) — Compact cross-steps & dense fill:', 40, 295, true);
+    ink.setSkipSensitivity(0.2);
+    ink.penDown(60, 320, 0.5, 0);
+    for (let i = 1; i <= 40; i++) {
+      ink.penMove(60 + i * 14, 320, 0.016, 0.5, i * 16);
+    }
+    ink.penUp(60 + 40 * 14, 320, 41 * 16);
+
+    // Nominal Skips (1.0x)
+    drawLabel('Nominal Skips (skipSensitivity = 1.0x) — Visible train tracks with spaced elliptical cross-bars:', 40, 370, true);
+    ink.setSkipSensitivity(1.0);
+    ink.penDown(60, 395, 0.5, 0);
+    for (let i = 1; i <= 40; i++) {
+      ink.penMove(60 + i * 14, 395, 0.016, 0.5, i * 16);
+    }
+    ink.penUp(60 + 40 * 14, 395, 41 * 16);
+
+    // Wide Skips (2.5x)
+    drawLabel('Wide Skips (skipSensitivity = 2.5x) — Prominent friction skipping & wide gaps:', 40, 445, true);
+    ink.setSkipSensitivity(2.5);
+    ink.penDown(60, 470, 0.5, 0);
+    for (let i = 1; i <= 40; i++) {
+      ink.penMove(60 + i * 14, 470, 0.016, 0.5, i * 16);
+    }
+    ink.penUp(60 + 40 * 14, 470, 41 * 16);
+
+    // ─────────────────────────────────────────────────────────────────
+    // SECTION 3: VOLCANO BLADE CLAPPING & CATENARY DECAY
+    // ─────────────────────────────────────────────────────────────────
+    drawSectionTitle('3. Volcano Pressure Release Dynamics (Momentary Swell -> Catenary U-Decay) & Provenance Droplets', 30, 535);
+
+    drawLabel('Curved Pen High-Speed Stroke triggering Volcano Blade Snap (burstExplosionWidth = 2.6x):', 40, 565, true);
+    ink.setTool('ruling_pen_curved', 'curved_ruling_broad');
+    ink.setColor('#191817');
+    ink.setThickness(10.5);
+    ink.setBladeAngle(Math.PI / 4);
+    ink.setSkipSensitivity(1.1);
+    ink.setSnapIntensity(1.4);
+    ink.setBurstExplosionWidth(2.6);
+    ink.setMinWidthScale(0.22);
+    ink.setMaxWidthScale(2.4);
+    ink.setMinSpitCount(6);
+    ink.setMaxSpitCount(18);
+    ink.setMaxDropletSize(5.5);
+
+    ink.penDown(60, 640, 0.5, 0);
+    for (let i = 1; i <= 48; i++) {
+      const t = i / 48;
+      const speed = 240 + Math.sin(t * Math.PI) * 440;
+      const dt = 20 / speed;
+      ink.penMove(60 + i * 23, 640 + Math.sin(i * 0.14) * 8, dt, 0.5, i * 20);
+    }
+    ink.penUp(60 + 48 * 23, 640, 49 * 20);
+
+    drawLabel('Note the momentary perpendicular widening at the snap, followed by compact steps easing along a fast catenary decay curve and elongated droplets angled back towards origin.', 40, 715);
+
+    // ─────────────────────────────────────────────────────────────────
+    // SECTION 4: FLAT RULING PEN — ASYMMETRIC COMB & ONE-SIDED SPITS
+    // ─────────────────────────────────────────────────────────────────
+    drawSectionTitle('4. Flat Chisel Pen — Pristine Left Flank vs Ragged Right Comb & Directional Spits', 30, 765);
+
+    drawLabel('Flat Chisel Ribbon (edgeAsymmetry = 95%, Right Flank Ragged Teeth + Provenance Droplets):', 40, 795, true);
+    ink.setTool('ruling_pen_flat', 'flat_ruling_broad');
+    ink.setColor('#191817');
+    ink.setThickness(11.0);
+    ink.setBladeAngle(Math.PI / 4);
+    ink.setEdgeAsymmetry(0.95);
+    ink.setAsymmetrySide('right');
+    ink.setChatterIntensity(1.6);
+    ink.setSkipSensitivity(1.0);
+    ink.setSnapIntensity(1.4);
+    ink.setBurstExplosionWidth(2.5);
+    ink.setMaxDropletSize(5.5);
+
+    ink.penDown(60, 880, 0.5, 0);
+    for (let i = 1; i <= 48; i++) {
+      const t = i / 48;
+      const speed = 250 + Math.sin(t * Math.PI) * 460;
+      const dt = 20 / speed;
+      ink.penMove(60 + i * 23, 880, dt, 0.5, i * 20);
+    }
+    ink.penUp(60 + 48 * 23, 880, 49 * 20);
+
+    // Calligraphic S-Curve gesture
+    drawLabel('Expressive S-Curve with German Expressionist Transverse Chisel Rectangles & Lateral Spit Showers:', 40, 975, true);
+    ink.setTool('ruling_pen_flat', 'flat_ruling_medium');
+    ink.setColor('#1d3a6e');
+    ink.setThickness(9.5);
+    ink.setEdgeAsymmetry(0.92);
+    ink.setAsymmetrySide('right');
+    ink.setBladeAngle(Math.PI / 3);
+    ink.setChatterIntensity(1.35);
+    ink.setBurstExplosionWidth(2.3);
+    ink.setSnapIntensity(1.3);
+
+    ink.penDown(70, 1090, 0.5, 0);
+    for (let i = 1; i <= 65; i++) {
+      const u = i / 65;
+      const px = 70 + i * 16.5;
+      const py = 1090 + Math.sin(u * Math.PI * 2) * 36;
+      ink.penMove(px, py, 0.016, 0.5, i * 16);
+    }
+    ink.penUp(70 + 65 * 16.5, 1090, 66 * 16);
+
+    console.log('Specimen rendering complete!');
+  </script>
+</body>
+</html>

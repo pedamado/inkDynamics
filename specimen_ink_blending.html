@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InkDynamics v4.0 — Ink Mixing, Overprint & Intersection Micro-Swell Specimen</title>
+  <style>
+    :root {
+      --bg: #0f1116;
+      --panel: #181b22;
+      --border: #272c37;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 28px;
+      background: rgba(15, 17, 22, 0.94);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .badge {
+      background: rgba(52, 211, 153, 0.14);
+      color: var(--emerald);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      transition: all 0.15s ease;
+    }
+    .nav-links a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .container {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 24px 28px 60px;
+    }
+    h1 {
+      margin: 0 0 6px 0;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .subtitle {
+      margin: 0 0 20px 0;
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .control-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 18px;
+    }
+    .ctrl-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .ctrl-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+    .ctrl-val {
+      color: var(--emerald);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .ctrl-group select,
+    .ctrl-group input[type="range"] {
+      width: 100%;
+      accent-color: var(--emerald);
+    }
+    .ctrl-group select {
+      background: #0f1116;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 6px 8px;
+      border-radius: 5px;
+      font-size: 12px;
+    }
+    .snippet-strip {
+      background: #0b0d12;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11.5px;
+      color: var(--emerald);
+      overflow-x: auto;
+    }
+    .snippet-strip button {
+      background: rgba(52, 211, 153, 0.15);
+      color: var(--emerald);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      border-radius: 5px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    canvas {
+      background: #fbfaf7;
+      border-radius: 8px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.55);
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="badge">v4.0 Specimen</span>
+      <strong>InkDynamics — Ink Mixing, Overprint &amp; Capillary Micro-Swell Verification</strong>
+    </div>
+    <nav class="nav-links">
+      <a href="index.html">← Interactive Calibration Lab</a>
+      <a href="specimen_ruling_pens.html">Ruling Pen Specimen (v3.8)</a>
+      <a href="design_handoff.html">Design Handoff Monograph</a>
+      <a href="about.html">About &amp; S.iX Credits</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>InkDynamics v4.0 — Ink That Mixes: Transparency, Overprint &amp; Intersection Micro-Swell</h1>
+    <p class="subtitle">
+      The 4.0 <code>'mix'</code> model (the 3.9 <code>'classic'</code> one stays selectable):
+      <strong>1.</strong> every colour laid at 97% density — the paper and earlier strokes show through, and sub-steps never band ·
+      <strong>2.</strong> crossings mix the two inks like an overprint (multiply), the same for every colour, white included ·
+      <strong>3.</strong> the mix comes in fast as the nib meets the ink and fades slowly after it ·
+      <strong>4.</strong> a 5–10% capillary swell at crossings, by ink (ruling pens 5%, Zig 7.5%, Posca 10%) ·
+      <strong>5.</strong> arc-length gated self-crossing loops for continuous eye-gaze &amp; boid trails.
+    </p>
+
+    <section class="control-bar" aria-label="Live Overprint Specimen Controls">
+      <div class="ctrl-group">
+        <div class="ctrl-label"><span>Ink Model</span><span class="ctrl-val" id="val-model">mix</span></div>
+        <select id="ctrl-model">
+          <option value="mix" selected>Mix — transparent ink that mixes (4.0)</option>
+          <option value="classic">Classic — darken &amp; light-ink cover (3.9)</option>
+        </select>
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label"><span>Overprint</span><span class="ctrl-val" id="val-mode">multiply</span></div>
+        <select id="ctrl-mode">
+          <option value="multiply" selected>On — mixing / darkening + swell</option>
+          <option value="source-over">Off — flat opaque colour</option>
+        </select>
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label"><span>Paper</span><span class="ctrl-val" id="val-paper">#F4F1EA</span></div>
+        <select id="ctrl-paper">
+          <option value="#FFFFFF">White</option>
+          <option value="#F4F1EA" selected>Munken Off-White</option>
+          <option value="#D2B48C">Kraft Tanned</option>
+          <option value="#9E9E98">Grey Chipboard</option>
+          <option value="#1A1A1A">Black</option>
+        </select>
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label"><span>Ink Density (transparency)</span><span class="ctrl-val" id="val-density">97%</span></div>
+        <input type="range" id="ctrl-density" min="0.65" max="1.00" step="0.01" value="0.97">
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label"><span>Blending Intensity</span><span class="ctrl-val" id="val-darken">45%</span></div>
+        <input type="range" id="ctrl-darken" min="0.00" max="1.00" step="0.05" value="0.45">
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label"><span>Approach Mix Speed</span><span class="ctrl-val" id="val-attack">85%</span></div>
+        <input type="range" id="ctrl-attack" min="0.00" max="1.00" step="0.05" value="0.85">
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label"><span>Exit Restore Speed</span><span class="ctrl-val" id="val-release">55%</span></div>
+        <input type="range" id="ctrl-release" min="0.00" max="1.00" step="0.05" value="0.55">
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label"><span>Crossing Reach (× nib)</span><span class="ctrl-val" id="val-reach">0.75×</span></div>
+        <input type="range" id="ctrl-reach" min="0.20" max="1.50" step="0.05" value="0.75">
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label"><span>Crossing Swell</span><span class="ctrl-val" id="val-swell">each ink's own</span></div>
+        <input type="range" id="ctrl-swell" min="0.00" max="0.30" step="0.005" value="0.075">
+        <label style="font-size: 11px; color: var(--muted);"><input type="checkbox" id="ctrl-swell-own" checked> each ink's own (ruling 5% · Zig 7.5% · Posca 10%)</label>
+      </div>
+    </section>
+
+    <div class="snippet-strip">
+      <code id="live-snippet">const ink = createInkDynamics({ canvas, tool: 'ruling_pen_curved', preset: 'curved_ruling_medium', color: '#191817', inkDensity: 0.97 });</code>
+      <button id="btn-copy-snippet" type="button">Copy 1-Line Call</button>
+    </div>
+
+    <canvas id="specimen-canvas" width="1200" height="1660"></canvas>
+  </main>
+
+  <script type="module">
+    import { createInkDynamics } from './js/inkdynamics.js';
+
+    const canvas = document.getElementById('specimen-canvas');
+    const ctx = canvas.getContext('2d');
+
+    const ink = createInkDynamics({
+      canvas,
+      tool: 'ruling_pen_curved',
+      preset: 'curved_ruling_medium',
+      color: '#191817',
+      thickness: 8.0,
+      paperColor: '#F4F1EA',
+      autoStep: false,
+    });
+
+    function drawSectionTitle(text, x, y) {
+      ctx.save();
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 15px -apple-system, BlinkMacSystemFont, sans-serif';
+      ctx.fillText(text, x, y);
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(x, y + 10);
+      ctx.lineTo(x + 1140, y + 10);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawLabel(text, x, y, bold = false, color = null) {
+      ctx.save();
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = color || (bold ? '#1e293b' : '#64748b');
+      ctx.font = (bold ? 'bold 12px' : '12px') + ' -apple-system, BlinkMacSystemFont, sans-serif';
+      ctx.fillText(text, x, y);
+      ctx.restore();
+    }
+
+    function strokeLine(x0, y0, x1, y1, steps = 32, baseTime = 1000) {
+      ink.penDown(x0, y0, 0.5, baseTime);
+      for (let i = 1; i <= steps; i++) {
+        const t = i / steps;
+        ink.penMove(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t, 0.016, 0.5, baseTime + i * 16);
+      }
+      ink.penUp(x1, y1, baseTime + (steps + 1) * 16);
+    }
+
+    const val = (id) => document.getElementById(id).value;
+    function currentOverprint() {
+      return {
+        overprintModel: val('ctrl-model'),
+        blendMode: val('ctrl-mode'),
+        inkDensity: parseFloat(val('ctrl-density')),
+        overprintDarken: parseFloat(val('ctrl-darken')),
+        overprintAttack: parseFloat(val('ctrl-attack')),
+        overprintRelease: parseFloat(val('ctrl-release')),
+        overprintReach: parseFloat(val('ctrl-reach')),
+        paperColor: val('ctrl-paper'),
+      };
+    }
+    // the swell: each ink's own, unless the box is unticked
+    function applySwell() {
+      if (!document.getElementById('ctrl-swell-own').checked) ink.setOverprintSwell(parseFloat(val('ctrl-swell')));
+    }
+
+    function renderAllSpecimens() {
+      const op = currentOverprint();
+      const pct = (v) => Math.round(v * 100) + '%';
+      document.getElementById('val-model').textContent = op.overprintModel;
+      document.getElementById('val-mode').textContent = op.blendMode;
+      document.getElementById('val-paper').textContent = op.paperColor;
+      document.getElementById('val-density').textContent = pct(op.inkDensity);
+      document.getElementById('val-darken').textContent = pct(op.overprintDarken);
+      document.getElementById('val-attack').textContent = pct(op.overprintAttack);
+      document.getElementById('val-release').textContent = pct(op.overprintRelease);
+      document.getElementById('val-reach').textContent = op.overprintReach.toFixed(2) + '×';
+      const own = document.getElementById('ctrl-swell-own').checked;
+      document.getElementById('val-swell').textContent = own ? "each ink's own" : '+' + (parseFloat(val('ctrl-swell')) * 100).toFixed(1) + '%';
+
+      document.getElementById('live-snippet').textContent =
+        `const ink = createInkDynamics({ canvas, tool: 'ruling_pen_curved', preset: 'curved_ruling_medium', color: '#191817', overprintModel: '${op.overprintModel}', blendMode: '${op.blendMode}', inkDensity: ${op.inkDensity}, overprintDarken: ${op.overprintDarken}, overprintAttack: ${op.overprintAttack}, overprintRelease: ${op.overprintRelease}, overprintReach: ${op.overprintReach}, paperColor: '${op.paperColor}'${own ? '' : ', overprintSwell: ' + parseFloat(val('ctrl-swell'))} });`;
+
+      ink.setOverprint(op);
+      ink.clear();
+      canvas.style.background = op.paperColor;
+      ctx.save();
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = op.paperColor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.restore();
+
+      // ─────────────────────────────────────────────────────────────────
+      // SECTION 1: ALL 4 INSTRUMENTS — CROSSED HATCH OVERPRINTING
+      // ─────────────────────────────────────────────────────────────────
+      drawSectionTitle('1. Crossed Hatch Overprinting & Capillary Micro-Swell Across All 4 Calibrated Instruments', 30, 42);
+
+      const tools = [
+        { tool: 'ruling_pen_curved', preset: 'curved_ruling_medium', title: 'Curved Ruling Pen (Blade)', radius: 8.5 },
+        { tool: 'ruling_pen_flat', preset: 'flat_ruling_medium', title: 'Flat Chisel Ruling Pen', radius: 9.5 },
+        { tool: 'posca_squeezer', preset: 'posca_squeezer_medium', title: 'Posca Mop Squeezer (v3)', radius: 10.5 },
+        { tool: 'chinese_brush', preset: 'medium_high_dynamic', title: 'Zig Chinese Brush (v2)', radius: 11.0 },
+      ];
+
+      tools.forEach((spec, idx) => {
+        const bx = 45 + idx * 285;
+        const by = 80;
+
+        drawLabel(spec.title, bx, by, true);
+
+        ink.setTool(spec.tool, spec.preset);
+        applySwell();
+        ink.setColor('#191817');
+        ink.setThickness(spec.radius);
+        if (spec.tool.startsWith('ruling_pen')) {
+          ink.setSnapIntensity(0.0);
+          ink.setBladeAngle(Math.PI / 4);
+        }
+
+        // 3 Horizontal pass strokes
+        strokeLine(bx, by + 35, bx + 235, by + 35, 30, 1000);
+        strokeLine(bx, by + 85, bx + 235, by + 85, 30, 2000);
+        strokeLine(bx, by + 135, bx + 235, by + 135, 30, 3000);
+
+        // 3 Diagonal/Vertical crossing strokes
+        strokeLine(bx + 45, by + 12, bx + 65, by + 165, 30, 4000);
+        strokeLine(bx + 115, by + 12, bx + 135, by + 165, 30, 5000);
+        strokeLine(bx + 185, by + 12, bx + 205, by + 165, 30, 6000);
+
+        drawLabel('9 crosses · 1st pass vs intersection swell', bx, by + 190);
+      });
+
+      // ─────────────────────────────────────────────────────────────────
+      // SECTION 2: MULTI-COLOR CHROMATIC OVERPRINTING
+      // ─────────────────────────────────────────────────────────────────
+      drawSectionTitle('2. Chromatic Pigment Overprinting (Charcoal Black × Vermilion Red × Prussian Blue × Raw Umber)', 30, 325);
+
+      const palette = [
+        { hex: '#191817', name: 'Charcoal Black (#191817)' },
+        { hex: '#b8261a', name: 'Vermilion Red (#b8261a)' },
+        { hex: '#1d3a6e', name: 'Prussian Blue (#1d3a6e)' },
+        { hex: '#4a2c18', name: 'Raw Umber (#4a2c18)' },
+      ];
+
+      ink.setTool('posca_squeezer', 'posca_squeezer_medium');
+      applySwell();
+      ink.setThickness(12.0);
+
+      // Horizontal bands in all 4 colors
+      palette.forEach((p, rIdx) => {
+        const y = 375 + rIdx * 48;
+        drawLabel(p.name, 40, y + 4, true, p.hex);
+        ink.setColor(p.hex);
+        strokeLine(240, y, 760, y, 42, 1000 + rIdx * 1000);
+      });
+
+      // Vertical crossing bands in all 4 colors
+      palette.forEach((p, cIdx) => {
+        const x = 320 + cIdx * 125;
+        ink.setColor(p.hex);
+        strokeLine(x, 350, x, 555, 36, 6000 + cIdx * 1000);
+        drawLabel(p.name.split(' ')[0] + ' ×', x - 24, 578, true, p.hex);
+      });
+
+      // Right side: Ruling Pen Chromatic Lattice
+      drawLabel('Flat Chisel Ruling Pen — Red × Blue × Black Lattice:', 810, 360, true);
+      ink.setTool('ruling_pen_flat', 'flat_ruling_broad');
+      ink.setThickness(11.0);
+      ink.setSnapIntensity(0.0);
+
+      ink.setColor('#b8261a');
+      strokeLine(810, 400, 1140, 400, 34, 1000);
+      strokeLine(810, 460, 1140, 460, 34, 2000);
+      ink.setColor('#1d3a6e');
+      strokeLine(810, 520, 1140, 520, 34, 3000);
+
+      ink.setColor('#1d3a6e');
+      strokeLine(870, 375, 900, 555, 32, 4000);
+      ink.setColor('#b8261a');
+      strokeLine(975, 375, 1005, 555, 32, 5000);
+      ink.setColor('#191817');
+      strokeLine(1080, 375, 1110, 555, 32, 6000);
+
+      // ─────────────────────────────────────────────────────────────────
+      // SECTION 3: CONTINUOUS SELF-CROSSING LOOPS (ARC-LENGTH GATE)
+      // ─────────────────────────────────────────────────────────────────
+      drawSectionTitle('3. Continuous Self-Crossing Loops (Eye-Gaze & Boid Lemniscates — Zero Sub-Step Banding, True Loop Overprint)', 30, 625);
+
+      const loopSpecs = [
+        { tool: 'ruling_pen_curved', preset: 'curved_ruling_medium', color: '#191817', label: 'Curved Ruling Pen Figure-8 Loop', cx: 210, cy: 745 },
+        { tool: 'posca_squeezer', preset: 'posca_squeezer_medium', color: '#b8261a', label: 'Posca Squeezer Continuous Double Loop', cx: 590, cy: 745 },
+        { tool: 'chinese_brush', preset: 'medium_high_dynamic', color: '#1d3a6e', label: 'Zig Brush Calligraphic Rosette Loop', cx: 970, cy: 745 },
+      ];
+
+      loopSpecs.forEach((ls) => {
+        drawLabel(ls.label, ls.cx - 125, ls.cy - 85, true);
+        ink.setTool(ls.tool, ls.preset);
+        applySwell();
+        ink.setColor(ls.color);
+        ink.setThickness(9.5);
+        if (ls.tool.startsWith('ruling_pen')) ink.setSnapIntensity(0.0);
+
+        const steps = 110;
+        const rx = 125;
+        const ry = 55;
+        for (let i = 0; i <= steps; i++) {
+          const t = (i / steps) * Math.PI * 2.35;
+          const x = ls.cx + Math.sin(t) * rx;
+          const y = ls.cy + Math.sin(2 * t) * ry;
+          if (i === 0) ink.penDown(x, y, 0.5, 1000);
+          else ink.penMove(x, y, 0.016, 0.5, 1000 + i * 16);
+        }
+        ink.penUp(ls.cx, ls.cy, 3000);
+        drawLabel('Center node crosses earlier arc (Δs > Δs_min) → swells & darkens', ls.cx - 145, ls.cy + 85);
+      });
+
+      // ─────────────────────────────────────────────────────────────────
+      // SECTION 4: PARAMETER SWEEP MATRIX (DENSITY vs MICRO-SWELL)
+      // ─────────────────────────────────────────────────────────────────
+      drawSectionTitle('4. Calibration Reference Matrix — Flat Opaque vs the 3.9 Classic vs the 4.0 Mix (Default and Heavy)', 30, 885);
+
+      const matrixConfigs = [
+        { model: 'mix', mode: 'source-over', density: 1.00, darken: 0.00, swell: 0.00, title: 'A. Flat Source-Over (OFF)', desc: '100% opaque · 0% crossing change' },
+        { model: 'classic', mode: 'multiply', density: 0.94, darken: 0.65, swell: 0.08, title: 'B. 3.9 Classic (94% / +8%)', desc: 'Lift toward white · darken · multiply' },
+        { model: 'mix', mode: 'multiply', density: 0.97, darken: 0.45, swell: 0.05, title: 'C. 4.0 Mix (97% / +5%)', desc: 'Transparent ink that mixes (default)' },
+        { model: 'mix', mode: 'multiply', density: 0.88, darken: 0.85, swell: 0.10, title: 'D. Heavy Wet Mix (88% / +10%)', desc: 'More see-through, deeper mixing' },
+      ];
+
+      matrixConfigs.forEach((mc, idx) => {
+        const bx = 45 + idx * 285;
+        const by = 925;
+
+        drawLabel(mc.title, bx, by, true);
+        drawLabel(mc.desc, bx, by + 18);
+
+        ink.setOverprint({
+          overprintModel: mc.model,
+          blendMode: mc.mode,
+          inkDensity: mc.density,
+          overprintDarken: mc.darken,
+        });
+
+        ink.setTool('ruling_pen_flat', 'flat_ruling_medium');
+        ink.setOverprintSwell(mc.swell);
+        ink.setColor('#191817');
+        ink.setThickness(10.0);
+        ink.setSnapIntensity(0.0);
+
+        // Draw 3 horizontal + 3 vertical bars + 1 diagonal
+        strokeLine(bx, by + 55, bx + 225, by + 55, 28, 1000);
+        strokeLine(bx, by + 105, bx + 225, by + 105, 28, 2000);
+        strokeLine(bx, by + 155, bx + 225, by + 155, 28, 3000);
+
+        strokeLine(bx + 50, by + 35, bx + 50, by + 185, 28, 4000);
+        strokeLine(bx + 115, by + 35, bx + 115, by + 185, 28, 5000);
+        strokeLine(bx + 180, by + 35, bx + 180, by + 185, 28, 6000);
+
+        // Restore user-selected slider settings after matrix cell
+      });
+
+      // Restore active top-bar settings so user can also draw directly on canvas!
+      ink.setOverprint(op);
+
+      // ─────────────────────────────────────────────────────────────────
+      // SECTION 5: EVERY COLOUR MIXES (Inkwell 20's Base palette, white included)
+      // ─────────────────────────────────────────────────────────────────
+      drawSectionTitle("5. Every Colour Mixes — Inkwell 20's Base Palette Crossed With Itself (choose a darker paper to see white)", 30, 1155);
+      const base = [
+        { hex: '#000000', name: 'Black' }, { hex: '#FFFFFF', name: 'White' }, { hex: '#D9D9D9', name: 'Light Grey' },
+        { hex: '#808080', name: 'Grey' }, { hex: '#33B3FF', name: 'Sky Blue' }, { hex: '#E60000', name: 'Red' },
+      ];
+      ink.setTool('chinese_brush', 'fine_low_var');
+      applySwell();
+      ink.setThickness(8.0);
+      base.forEach((c, i) => {
+        const y = 1205 + i * 36;
+        drawLabel(c.name + ' ' + c.hex, 40, y + 4, true, op.paperColor === '#1A1A1A' ? '#e2e8f0' : '#334155');
+        ink.setColor(c.hex);
+        strokeLine(220, y, 1150, y, 60, 1000 + i * 1000);
+      });
+      base.forEach((c, i) => {
+        const x = 300 + i * 150;
+        ink.setColor(c.hex);
+        strokeLine(x, 1185, x, 1405, 30, 8000 + i * 1000);
+      });
+
+      ink.setTool('ruling_pen_curved', 'curved_ruling_medium');
+      applySwell();
+      ink.setColor('#191817');
+      ink.setThickness(8.5);
+
+      drawSectionTitle('6. Interactive Live Overprint Sandbox — Draw & Cross Strokes Directly Below', 30, 1455);
+      drawLabel('Use your mouse or stylus below to test real-time crossing mixing and capillary micro-swell with the controls above:', 30, 1485);
+    }
+
+    ['ctrl-model', 'ctrl-mode', 'ctrl-paper', 'ctrl-density', 'ctrl-darken', 'ctrl-attack', 'ctrl-release', 'ctrl-reach', 'ctrl-swell', 'ctrl-swell-own'].forEach((id) => {
+      document.getElementById(id).addEventListener('input', renderAllSpecimens);
+      document.getElementById(id).addEventListener('change', renderAllSpecimens);
+    });
+
+    document.getElementById('btn-copy-snippet').addEventListener('click', () => {
+      const text = document.getElementById('live-snippet').textContent;
+      navigator.clipboard.writeText(text);
+      const btn = document.getElementById('btn-copy-snippet');
+      btn.textContent = '✓ Copied!';
+      setTimeout(() => { btn.textContent = 'Copy 1-Line Call'; }, 1400);
+    });
+
+    // Enable interactive drawing anywhere on the specimen canvas
+    let isDrawing = false;
+    let lastT = 0;
+    canvas.addEventListener('pointerdown', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const x = (e.clientX - rect.left) * scaleX;
+      const y = (e.clientY - rect.top) * scaleY;
+      isDrawing = true;
+      lastT = performance.now();
+      ink.penDown(x, y, e.pressure || 0.5, lastT);
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (!isDrawing) return;
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const x = (e.clientX - rect.left) * scaleX;
+      const y = (e.clientY - rect.top) * scaleY;
+      const now = performance.now();
+      const dt = Math.max(0.004, (now - lastT) / 1000);
+      lastT = now;
+      ink.penMove(x, y, dt, e.pressure || 0.5, now);
+    });
+    window.addEventListener('pointerup', (e) => {
+      if (!isDrawing) return;
+      isDrawing = false;
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const x = (e.clientX - rect.left) * scaleX;
+      const y = (e.clientY - rect.top) * scaleY;
+      ink.penUp(x, y, performance.now());
+    });
+
+    renderAllSpecimens();
+  </script>
+</body>
+</html>
