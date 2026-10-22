@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About InkDynamics · SiX Research Project</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body {
+      overflow-y: auto !important;
+      touch-action: auto !important;
+      background: #0b0c10;
+      color: #e2e8f0;
+      line-height: 1.7;
+    }
+    .about-page-container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 24px 80px 24px;
+    }
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 36px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .nav-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #cbd5e1;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .nav-back-btn:hover {
+      background: rgba(99, 102, 241, 0.25);
+      border-color: #818cf8;
+      color: #ffffff;
+    }
+    .page-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .page-subtitle {
+      font-size: 16px;
+      color: #a5b4fc;
+      margin-bottom: 32px;
+      font-weight: 500;
+    }
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(79, 70, 229, 0.22) 0%, rgba(15, 23, 42, 0.7) 100%);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      margin-bottom: 40px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+    .hero-banner h2 {
+      font-size: 20px;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+    .hero-banner p {
+      font-size: 14px;
+      color: #c7d2fe;
+      margin: 0;
+    }
+    .section-block {
+      margin-bottom: 40px;
+    }
+    .section-block h2 {
+      font-size: 22px;
+      color: #ffffff;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-block p {
+      margin-bottom: 16px;
+      color: #cbd5e1;
+      font-size: 14.5px;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    @media (max-width: 680px) {
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .inst-card {
+      background: rgba(22, 24, 29, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    .inst-card h3 {
+      font-size: 15px;
+      color: #93c5fd;
+      margin-bottom: 8px;
+    }
+    .inst-card p {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.55;
+      margin: 0;
+    }
+    .code-preview {
+      background: #060709;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      line-height: 1.6;
+      color: #a5f3fc;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    .credits-box {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      font-size: 13.5px;
+      line-height: 1.7;
+    }
+    .credits-box strong {
+      color: #f8fafc;
+    }
+    .credits-box a {
+      color: #818cf8;
+      text-decoration: none;
+    }
+    .credits-box a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="about-page-container">
+    <header class="nav-bar">
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <a href="index.html" class="nav-back-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Drawing Lab
+        </a>
+        <a href="design_handoff.html" class="nav-back-btn" style="background: rgba(99, 102, 241, 0.2); border-color: #818cf8; color: #fff;">
+          📐 Design Handoff &amp; Spec
+        </a>
+        <a href="specimen_ruling_pens.html" class="nav-back-btn">
+          🔬 Ruling Specimen (v3.8)
+        </a>
+        <a href="specimen_ink_blending.html" class="nav-back-btn" style="background: rgba(52, 211, 153, 0.15); border-color: rgba(52, 211, 153, 0.35); color: #34d399;">
+          💧 Ink Mixing Specimen (v4.0)
+        </a>
+        <a href="../index.html" class="nav-back-btn">
+          Hub ↗
+        </a>
+      </div>
+      <span style="font-size: 12px; color: var(--text-dim);">SiX Project · FBAUP / i2ADS</span>
+    </header>
+
+    <h1 class="page-title">InkDynamics</h1>
+    <div class="page-subtitle">Physical Ink Mechanics, Expressive Calligraphic Lines & Assistive Art Making</div>
+
+    <div class="hero-banner">
+      <h2>SiX — Drawing for Social Re-connectivity</h2>
+      <p>
+        An interdisciplinary scientific research project exploring digital drawing, gaze interaction, and expressive lines as a vehicle for human connection, motor rehabilitation, and creative autonomy for individuals facing motor impairments and neurodegenerative conditions (such as Amyotrophic Lateral Sclerosis / ALS / ELA and locked-in syndrome).
+      </p>
+    </div>
+
+    <section class="section-block">
+      <h2>1. The Concept & The Expressive Line</h2>
+      <p>
+        Digital drawing environments traditionally rely on sterile geometric abstractions: uniform circular brushes, smooth Bézier curves, or dead vector ribbons. While computationally clean, these abstractions strip away the very essence of human mark-making—<strong>the resistance, friction, fluid starvation, and organic micro-accidents</strong> that give a handwritten line its soul and expressive voice.
+      </p>
+      <p>
+        In assistive drawing systems such as <em>Inkwell</em> (which enables art-making via eye gaze dwell or minimal micro-movements), the expressiveness of the mark is paramount. When an artist cannot modulate a physical stylus with hand pressure, the software engine itself must imbue the line with kinematic intelligence and physical reality.
+      </p>
+      <p>
+        Conceived and designed by <strong>Pedro Amado</strong> (Faculty of Fine Arts of the University of Porto / i2ADS Research Institute), <strong>InkDynamics</strong> was created to simulate the real physics of liquid ink, deformable nibs, and fibrous paper substrates. It was developed by Google Gemini 3.8 Flash in Antigravity and Anthropic Claude Opus 5.5 (October 2026).
+      </p>
+    </section>
+
+    <section class="section-block">
+      <h2>2. The Four Calibrated Physical Instruments</h2>
+      <p>
+        Each instrument in <em>InkDynamics</em> has been calibrated against high-resolution physical macro photographic specimens of real ink on textured paper:
+      </p>
+
+      <div class="card-grid">
+        <div class="inst-card">
+          <h3>🖌️ Zig Chinese Calligraphy Brush (v2)</h3>
+          <p>
+            Models capillary multi-bristle hair bundles. As stroke velocity accelerates, ink flow down the hairs is starved, exposing individual bristle tracks (hollow dry brush marks). Hesitation causes capillary pooling, while line touchdowns produce an asymmetric "tibia bone-head" contact flare.
+          </p>
+        </div>
+
+        <div class="inst-card">
+          <h3>🟡 Posca Mop Squeezer (v3)</h3>
+          <p>
+            Simulates a pressurized round sponge dome filled with dense, opaque acrylic paint. The core maintains 100% solid saturated ink, while the dome flanks experience longitudinal tooth starvation. Resting or dwelling triggers authentic gravity-driven downward drip cascades.
+          </p>
+        </div>
+
+        <div class="inst-card">
+          <h3>📐 Curved Ruling / Folded Cola Pen (v3.8)</h3>
+          <p>
+            Crafted from two tightly bound curved metal plates. Touchdown stamps an angled pill ellipse aligned with blade orientation. Inverted friction skips alternate between dense cross-bars and wide skips. Sudden pressure releases explode into volcano-like spit bursts that ease out in a fast catenary curve, accompanied by directional provenance spit droplets.
+          </p>
+        </div>
+
+        <div class="inst-card">
+          <h3>📏 Flat Ruling / Chisel Pen (v3.8)</h3>
+          <p>
+            Inspired by German Expressionist calligraphy and flat folded brass pens. Features severe edge asymmetry: one flank remains laser-sharp and clean, while the opposite trailing edge breaks into aggressive soundwave comb teeth (flaring up to 3x nominal stroke width), dual corner train tracks, and directional spit droplet showers.
+          </p>
+        </div>
+
+        <div class="inst-card">
+          <h3>💧 Ink That Mixes (v4.0)</h3>
+          <p>
+            Every colour is laid slightly transparent (97% density): the paper and the strokes beneath show through. Where strokes cross, the inks mix like an overprint — the mix comes in fast as the nib meets the ink and fades slowly after it — and the line swells 5–10%, by ink (least in the ruling pens' quick-drying ink, most in the Posca's heavy acrylic). Black stays black. Your own tunings are kept as presets (in the browser or on a server); the 13 core presets are permanent.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <h2>3. Dual Purpose & Open-Source Community Tool</h2>
+      <p>
+        <strong>InkDynamics</strong> fulfills two central roles:
+      </p>
+      <ol style="margin-left: 20px; color: #cbd5e1; font-size: 14.5px; line-height: 1.8;">
+        <li>
+          <strong>Core Engine for Inkwell 20:</strong> It provides the stroke rendering pipeline for the SiX project's gaze and assistive drawing applications (connecting with InkGaze.js, multi-agent boids with pens of their own, and accessibility inputs).
+        </li>
+        <li>
+          <strong>Standalone Modular Library for Creative Coders:</strong> It is packaged as a standalone, zero-dependency JavaScript library (ESM and script tag) that any developer or artist can use to build custom drawing software, generative art pipelines, or expressive sketching tools.
+        </li>
+      </ol>
+    </section>
+
+    <section class="section-block">
+      <h2>4. Quickstart & Integration</h2>
+      <p>
+        Integrating <em>InkDynamics</em> into any HTML5 canvas takes a single line of code:
+      </p>
+      <pre class="code-preview"><code>import { createInkDynamics } from './InkDynamics/js/inkdynamics.js';
+
+// 1-Line Instantiation
+const ink = createInkDynamics({
+  canvas: document.getElementById('myCanvas'),
+  tool: 'ruling_pen_curved',
+  preset: 'curved_ruling_medium',
+  color: '#191817',
+  thickness: 7.0,
+  paperTooth: 0.45
+});
+
+// Drive with any coordinate stream (mouse, touch, eye gaze, or boids)
+ink.penDown(x, y, 0.5);
+ink.penMove(newX, newY, dt, 0.5);
+ink.penUp(newX, newY);</code></pre>
+      <p>
+        You can also use the interactive <strong>1-Line Call / Config JSON</strong> field in the lab toolbar to copy the exact initialization string for any pen after customizing its parameters.
+      </p>
+    </section>
+
+    <section class="section-block">
+      <h2>5. Credits, Institutional Affiliations & Funding</h2>
+      <div class="credits-box">
+        <p>
+          <strong>Project:</strong> <a href="https://six.fba.up.pt/" target="_blank" rel="noopener">SiX — Drawing for Social Re-connectivity</a><br />
+          <strong>Hosting Institutions:</strong> Faculty of Fine Arts, University of Porto (FBAUP) & Research Institute in Art, Design and Society (i2ADS).<br />
+          <strong>Principal Investigator:</strong> Eliana Penedos-Santiago (ID+ · FBAUP).<br />
+          <strong>SiX Research Team:</strong> Andreia Pinto de Sousa, Bruno Giesteira, Cláudia Lima, Pedro Amado, Sílvia Simões, Viviane Peçaibes.<br />
+          <strong>Concept and design (expressive line & dynamic agents):</strong> Pedro Amado (FBAUP / i2ADS).<br />
+          <strong>Development:</strong> Google Gemini 3.8 Flash in Antigravity (versions 1.0–3.9) and Anthropic Claude Opus 5.5 (version 4.0, October 2026).<br />
+          <strong>Consultants & Collaborators:</strong> Filipe Gonçalves (APELA), Miguel Alves-Ferreira (CGPP-IBMC / i3S), Lara Portelinha, Manuel Silva, Vasco Praça.<br />
+          <strong>Partners:</strong> APELA · ADITGAMES · i3S / IBMC · Fraunhofer AICOS.<br />
+          <strong>Funding Acknowledgement:</strong> This work is financed by national funds through the Portuguese funding agency, FCT — Fundação para a Ciência e a Tecnologia, I.P., within the project «2023.11224.PEX» [DOI <a href="https://doi.org/10.54499/2023.11224.PEX" target="_blank" rel="noopener">10.54499/2023.11224.PEX</a>].
+        </p>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
