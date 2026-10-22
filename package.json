@@ -1,0 +1,47 @@
+{
+  "name": "inkdynamics",
+  "version": "4.0.0",
+  "description": "Physical ink for HTML5 canvas: four calibrated instruments (Zig Chinese brush, Posca mop squeezer, curved and flat ruling pens), slightly transparent ink that mixes where strokes cross, gravity drips, multi-agent pens and user presets. Developed as part of the SiX Research Project (FBAUP / i2ADS).",
+  "main": "js/inkdynamics.js",
+  "module": "js/inkdynamics.js",
+  "type": "module",
+  "scripts": {
+    "start": "node -e \"const http=require('http'),fs=require('fs'),path=require('path');http.createServer((req,res)=>{let p=decodeURI(req.url.split('?')[0]);if(p==='/')p='/index.html';const f=path.join(process.cwd(),p);if(!fs.existsSync(f)){res.writeHead(404);return res.end('Not Found');}const ext=path.extname(f);const m={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.jpg':'image/jpeg'}[ext]||'application/octet-stream';res.writeHead(200,{'Content-Type':m});fs.createReadStream(f).pipe(res);}).listen(8085,()=>console.log('InkDynamics running at http://localhost:8085'));\"",
+    "test": "node test_v3.js && node test_ruling_pens.js && node test_v4.js"
+  },
+  "keywords": [
+    "canvas",
+    "calligraphy",
+    "ink",
+    "fluid-dynamics",
+    "drawing",
+    "posca",
+    "ruling-pen",
+    "chinese-brush",
+    "generative-art",
+    "assistive-technology",
+    "eye-gaze",
+    "boids",
+    "six-project",
+    "overprint",
+    "ink-mixing",
+    "user-presets"
+  ],
+  "author": "Pedro Amado <pamado@fba.up.pt> (FBAUP / i2ADS)",
+  "contributors": [
+    "Eliana Penedos-Santiago",
+    "SiX Research Project Team",
+    "Development: Google Gemini 3.8 Flash (Antigravity)",
+    "Development: Anthropic Claude Opus 5.5 (October 2026)"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/six-project/inkdynamics.git"
+  },
+  "homepage": "https://six.fba.up.pt/",
+  "funding": {
+    "type": "grant",
+    "url": "https://doi.org/10.54499/2023.11224.PEX"
+  }
+}
