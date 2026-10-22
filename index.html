@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Ink Dynamics v4.0 — Physical Drawing Lab (Zig Brush, Posca Mop & Ruling Pens)</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="app-container">
+    <!-- Drawing Surface & Paper Substrate -->
+    <main id="canvas-viewport">
+      <canvas id="drawing-canvas"></canvas>
+    </main>
+
+    <!-- Floating Glassmorphic Toolbar (Left) -->
+    <aside id="toolbar-container" aria-label="Drawing Tools"></aside>
+
+    <!-- Floating Physics Telemetry HUD (Top-Right) -->
+    <aside id="hud-container" aria-label="Physics Telemetry"></aside>
+
+    <!-- Bottom Contextual Hint -->
+    <footer id="hint-container">
+      Draw slowly to engorge ink & trigger gravity drips. Move fast for longitudinal tooth starvation. Cross a stroke to see the inks mix. Undo: Cmd+Z
+    </footer>
+
+    <!-- Reference Photos Comparison Modal -->
+    <dialog id="reference-modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Physical Calibration Reference Specimens</h2>
+        <button id="ref-modal-close-btn" class="modal-close" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Instrument Tabs -->
+        <div class="modal-tabs">
+          <button id="tab-btn-ruling-curved" class="tab-btn">📐 Curved Ruling Pen</button>
+          <button id="tab-btn-ruling-flat" class="tab-btn">📏 Flat Ruling Pen</button>
+          <button id="tab-btn-posca" class="tab-btn active">🟡 Posca Mop Squeezer (v3)</button>
+          <button id="tab-btn-zig" class="tab-btn">🖌️ Zig Chinese Brush (v2)</button>
+        </div>
+
+        <!-- Posca Reference Panel -->
+        <div id="ref-panel-posca" class="ref-panel">
+          <p>
+            Physical calibration photos of the round soft-dome <strong>Posca Mop Squeezer</strong> on paper substrate:
+          </p>
+          <div class="ref-grid">
+            <div class="ref-item">
+              <h4>1. High-Speed Waisting / Slight Thinning</h4>
+              <p>Monoline stroke with subtle waist narrowing during rapid stroke velocity, swelling into a round bulb when stopping.</p>
+              <img src="_Reference/posca_calibrations/fig1_single_stroke_waist.jpg" alt="Single Stroke Waist Thinning" />
+            </div>
+
+            <div class="ref-item">
+              <h4>2. Longitudinal Border Starvation Stripes</h4>
+              <p>Center remains 100% solid saturated black, while curved dome flanks lose micro-contact along outer border limits over paper tooth.</p>
+              <img src="_Reference/posca_calibrations/fig2_border_starvation_stripes.jpg" alt="Border Starvation Stripes" />
+            </div>
+
+            <div class="ref-item">
+              <h4>3. Regular Round Caps & Pooling Endings</h4>
+              <p>Clean regular circular dome cap endings. Decelerating and resting causes viscous acrylic pooling.</p>
+              <img src="_Reference/posca_calibrations/fig3_caps_endings_pooling.jpg" alt="Caps and Endings Pooling" />
+            </div>
+
+            <div class="ref-item">
+              <h4>4. Circular Dome Touchdown Contact</h4>
+              <p>Very regular round circular contact stamps with slight initial engorgement flare upon paper touch.</p>
+              <img src="_Reference/posca_calibrations/fig4_starts_dome_contact.jpg" alt="Dome Contact Starts" />
+            </div>
+
+            <div class="ref-item">
+              <h4>5. Thin, Medium & Thick Nib Specimen Comparison</h4>
+              <p>Monoline width consistency across thin (12mm), medium (24mm), and broad jumbo (44mm) squeezer heads.</p>
+              <img src="_Reference/posca_calibrations/fig5_thin_medium_thick_overview.jpg" alt="Thin Medium Thick Overview" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Zig Brush Reference Panel -->
+        <div id="ref-panel-zig" class="ref-panel hidden">
+          <p>
+            Physical calibration specimens of the flexible <strong>Zig Chinese Calligraphy Brush</strong>:
+          </p>
+          <div class="ref-grid">
+            <div class="ref-item">
+              <h4>1. Longitudinal Starvation Stripes (Bristle Depletion)</h4>
+              <p>At high velocity, ink cannot flow down individual bristles fast enough, creating crisp parallel white tracks.</p>
+              <img src="_Reference/user_calibrations/fig5_starvation_stripes.jpg" alt="Longitudinal Starvation Stripes" />
+            </div>
+
+            <div class="ref-item">
+              <h4>2. Asymmetric "Tibia Bone-Head" Starts</h4>
+              <p>Initial landing contact bends into an angled, flared trapezoid before narrowing into the stroke neck.</p>
+              <img src="_Reference/user_calibrations/fig4_bone_heads.jpg" alt="Bone-Head Starts and Soak Test" />
+            </div>
+
+            <div class="ref-item">
+              <h4>3. Line Starts, Tapered Tips & Engorged Ends</h4>
+              <p>Flicking fast at the end tapers to a sharp hairline; slowing down refills into a solid black engorged cap.</p>
+              <img src="_Reference/user_calibrations/fig1_starts_ends.jpg" alt="Stroke Starts and Ends" />
+            </div>
+
+            <div class="ref-item">
+              <h4>4. Straight & S-Curve Dynamic Velocity Sweeps</h4>
+              <p>Notice how speed thinning and starvation stripes occur in the fast belly of the curve.</p>
+              <img src="_Reference/user_calibrations/fig2_curves_straight.jpg" alt="Curve and Straight Strokes" />
+            </div>
+
+            <div class="ref-item">
+              <h4>5. Width Contrast & Mid-Stroke Hesitation Knots</h4>
+              <p>Pauses and slowing create high-contrast organic knots and pools along the stroke shaft.</p>
+              <img src="_Reference/user_calibrations/fig3_width_knots.jpg" alt="Width Contrast and Knots" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Curved Ruling Pen Reference Panel -->
+        <div id="ref-panel-ruling-curved" class="ref-panel hidden">
+          <p>
+            Physical calibration specimens of the <strong>Curved Ruling Pen / Folded Cola Pen</strong>:
+          </p>
+          <div class="ref-grid">
+            <div class="ref-item">
+              <h4>1. Fusiform Curved Blade Contact & Modulation</h4>
+              <p>Curved lance blade contour produces speed and angle-dependent thickness modulation, swelling when slow and waisting at high velocities.</p>
+              <img src="_Reference/ruling_pen_calibrations/fig1_curved_ruling_pen.jpg" alt="Curved Ruling Pen Strokes" />
+            </div>
+
+            <div class="ref-item">
+              <h4>2. Bilateral Compressed Soundwave Edge Chatter</h4>
+              <p>Rhythmic, high-frequency soundwave ripples oscillating outward symmetrically on both flanks as the blade vibrates.</p>
+              <img src="_Reference/ruling_pen_calibrations/fig1_curved_ruling_pen.jpg" alt="Soundwave Ripples" />
+            </div>
+
+            <div class="ref-item">
+              <h4>3. "Ellipses on Train Tracks" Friction Skips</h4>
+              <p>Outer blade edges drag rail tracks. Transverse friction micro-jumps form elliptical cross-bars whose spacing widens with velocity.</p>
+              <img src="_Reference/ruling_pen_calibrations/fig1_curved_ruling_pen.jpg" alt="Train Tracks and Transverse Skips" />
+            </div>
+
+            <div class="ref-item">
+              <h4>4. Fan-Shaped Clapping Spit Bursts</h4>
+              <p>As spring tension releases, parallel metal sheets clap together violently, ejecting directional spit droplets laterally to both flanks.</p>
+              <img src="_Reference/ruling_pen_calibrations/fig1_curved_ruling_pen.jpg" alt="Clapping Spit Bursts" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Flat Ruling Pen Reference Panel -->
+        <div id="ref-panel-ruling-flat" class="ref-panel hidden">
+          <p>
+            Physical calibration specimens of the <strong>Flat Ruling Pen / German Expressionist Chisel Blade</strong>:
+          </p>
+          <div class="ref-grid">
+            <div class="ref-item">
+              <h4>1. Marked Edge Asymmetry (Pristine vs Ragged)</h4>
+              <p>Notice how one flank remains laser-straight and sharp, while the opposing flank exhibits aggressive jagged soundwave teeth.</p>
+              <img src="_Reference/ruling_pen_calibrations/fig2_flat_ruling_pen.jpg" alt="Flat Ruling Pen Asymmetric Strokes" />
+            </div>
+
+            <div class="ref-item">
+              <h4>2. High-Frequency Teeth Flaring Up to 3x Width</h4>
+              <p>At high speeds, the jagged comb teeth flare outward up to 3x the nominal stroke width, creating intense texture.</p>
+              <img src="_Reference/ruling_pen_calibrations/fig2_flat_ruling_pen.jpg" alt="High Frequency Teeth" />
+            </div>
+
+            <div class="ref-item">
+              <h4>3. One-Sided Clapping Spit Explosions</h4>
+              <p>When tension releases, spit droplets blast predominantly toward the ragged flank direction, matching physical behavior.</p>
+              <img src="_Reference/ruling_pen_calibrations/fig2_flat_ruling_pen.jpg" alt="One-Sided Spit Explosions" />
+            </div>
+
+            <div class="ref-item">
+              <h4>4. Chisel Ribbon Sweeps & Sharp Rectangular Caps</h4>
+              <p>Chisel ribbon geometry maintains monoline width along shaft with sharp rectangular chisel contact caps and corner rails.</p>
+              <img src="_Reference/ruling_pen_calibrations/fig3_flat_ruling_curved_strokes.jpg" alt="Curved Chisel Ribbon Sweeps" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- About S.iX & InkDynamics Modal -->
+    <dialog id="about-modal">
+      <div class="modal-header">
+        <h2 class="modal-title">About InkDynamics · SiX Research Project</h2>
+        <button id="about-modal-close-btn" class="modal-close" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="about-hero">
+          <h3>SiX — Drawing for Social Re-connectivity</h3>
+          <p>An interdisciplinary research project developing assistive, expressive digital drawing and calligraphic tools for individuals with motor impairments (ALS/ELA, locked-in syndrome) and creative communities.</p>
+        </div>
+
+        <div>
+          <h3>Concept, Expressive Line & Dynamic Agents</h3>
+          <p>
+            Concept and design by <strong>Pedro Amado</strong> (Faculty of Fine Arts of the University of Porto / i2ADS Research Institute); development by Google Gemini 3.8 Flash in Antigravity and Anthropic Claude Opus 5.5 (October 2026).
+          </p>
+          <p>
+            Digital lines in drawing software often feel sterile, static, and disconnected from human gesture. When drawing through non-traditional interfaces—such as eye gaze dwell (in <em>Inkwell</em> and <em>InkGaze</em>) or micro hand gestures—the line itself must carry emotional vitality, visceral weight, and physical friction.
+          </p>
+          <p>
+            <strong>InkDynamics</strong> models the micro-physics of liquid fluid flow, capillary bristle depletion, pressurized mop waisting, and vibrating metallic sheet friction.
+          </p>
+        </div>
+
+        <div class="about-grid">
+          <div class="about-card">
+            <h4>🖌️ Zig Chinese Calligraphy Brush (v2)</h4>
+            <p>Capillary bristle split, velocity-based ink starvation, asymmetric "bone-head" touch-down flares, and paper tooth friction.</p>
+          </div>
+          <div class="about-card">
+            <h4>🟡 Posca Mop Squeezer (v3)</h4>
+            <p>Monoline fluid acrylic core, dome touch-down stamps, speed waisting, border starvation stripes, and natural gravity-driven drip runs.</p>
+          </div>
+          <div class="about-card">
+            <h4>📐 Curved Ruling / Folded Cola Pen (v3.8)</h4>
+            <p>Lance blade contour, angled pill ellipse touchdown, inverted friction skips (dense ladder vs wide skips), volcano pressure-release catenary decay, and directional provenance spit bursts.</p>
+          </div>
+          <div class="about-card">
+            <h4>📏 Flat Ruling / Chisel Pen (v3.8)</h4>
+            <p>Extreme edge asymmetry (laser-straight spine vs jagged soundwave comb), dual corner train tracks, speed-flared teeth up to 3x nominal width, and directional spit bursts.</p>
+          </div>
+          <div class="about-card">
+            <h4>💧 Ink that mixes (v4.0)</h4>
+            <p>Every colour laid at 97% density — the paper and earlier strokes show through — and mixed like an overprint where strokes cross: fast as the nib meets the ink, slowly fading after it, with a 5–10% capillary swell by ink.</p>
+          </div>
+        </div>
+
+        <div>
+          <h3>Application Purpose</h3>
+          <p>
+            <strong>1. Integration into Inkwell:</strong> Powers the expressive stroke rendering engine in Inkwell 20 for eye-gaze and assistive drawing modes — every pen of the library, Inkwell's colours and papers, ink that mixes where strokes cross.
+          </p>
+          <p>
+            <strong>2. Standalone Library for Creative Coders:</strong> A zero-dependency, modular JavaScript library for any web developer, generative artist, or researcher wishing to add authentic, expressive physical line mechanics into their canvas applications.
+          </p>
+          <p>
+            <strong>3. Interactive 1-Line Snippet Generator:</strong> The toolbar provides live copy-pasteable constructor calls and configuration JSON objects to instantly bring your customized instruments into external apps.
+          </p>
+        </div>
+
+        <div class="about-team-box">
+          <p>
+            <strong>SiX Project Team:</strong> Principal Investigator: <strong>Eliana Penedos-Santiago</strong> (ID+ · FBAUP). Team: Andreia Pinto de Sousa, Bruno Giesteira, Cláudia Lima, Pedro Amado, Sílvia Simões, Viviane Peçaibes.<br />
+            <strong>Consultants & Collaborators:</strong> Filipe Gonçalves (APELA), Miguel Alves-Ferreira (CGPP-IBMC / i3S), Lara Portelinha, Manuel Silva, Vasco Praça.<br />
+            <strong>Institutional Partners:</strong> APELA · ADITGAMES · i3S / IBMC · Fraunhofer AICOS.<br />
+            <strong>Funding:</strong> Financed by national funds through FCT — Fundação para a Ciência e a Tecnologia, within project «2023.11224.PEX» [DOI <a href="https://doi.org/10.54499/2023.11224.PEX" target="_blank" rel="noopener">10.54499/2023.11224.PEX</a>].
+          </p>
+        </div>
+
+        <div class="about-links-row">
+          <a href="design_handoff.html" target="_blank" class="about-pill-btn" style="background: rgba(99, 102, 241, 0.25); border-color: #818cf8; color: #fff;">📐 Design Handoff &amp; Spec</a>
+          <a href="specimen_ruling_pens.html" target="_blank" class="about-pill-btn">🔬 Ruling Specimen (v3.8)</a>
+          <a href="specimen_ink_blending.html" target="_blank" class="about-pill-btn" style="background: rgba(52, 211, 153, 0.16); border-color: rgba(52, 211, 153, 0.4); color: #34d399;">💧 Ink Mixing Specimen (v4.0)</a>
+          <a href="about.html" class="about-pill-btn">📄 Full About Page</a>
+          <a href="https://six.fba.up.pt/" target="_blank" rel="noopener" class="about-pill-btn">🌐 SiX Website</a>
+        </div>
+      </div>
+    </dialog>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
